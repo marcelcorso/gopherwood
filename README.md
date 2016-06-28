@@ -10,11 +10,13 @@ Binary trees are pretty.
 
 Thread safe trees are hard to implement effeciently (because you need to write-lock sections of the tree and other tricks).
 
+...
+
 _Do not communicate by sharing memory; instead, share memory by communicating._
 
 **What if every tree node was handled by a goroutine?**
 
-Bang! Gopherwood. (some trees are made of wood)
+**Bang!** Gopherwood. (some trees are made of wood)
 
 ## Dialogue
 
