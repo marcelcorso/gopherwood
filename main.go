@@ -16,50 +16,49 @@ func createNode(key string) (chan string, chan string) {
 	go func() {
 		for {
 			switch <-in {
+			// get and set are not used but are didactic
 			case "get":
 				out <- key
 			case "set":
 				key = <-in
+
 			case "add":
 				newKey := <-in
-				// TODO pointer to chan can dedup this:
-				if key < newKey {
-					if rightTo == nil {
-						rightTo, rightFro = createNode(newKey)
-					} else {
-						rightTo <- "add"
-						rightTo <- newKey
-					}
-				} else if key > newKey {
-					if rightTo == nil {
-						leftTo, leftFro = createNode(newKey)
-					} else {
-						leftTo <- "add"
-						leftTo <- newKey
-					}
+
+				sideTo := &rightTo
+				sideFro := &rightFro
+				if key > newKey {
+					sideTo = &leftTo
+					sideFro = &leftFro
+				} else if key == newKey {
+					continue
 				}
-				// nothing to do if key == newKey
+
+				if *sideTo == nil {
+					*sideTo, *sideFro = createNode(newKey)
+				} else {
+					*sideTo <- "add"
+					*sideTo <- newKey
+				}
 			case "search":
 				searchKey := <-in
-				if key < searchKey {
-					if rightTo == nil {
-						out <- "nope"
-					} else {
-						rightTo <- "search"
-						rightTo <- searchKey
-						out <- <-rightFro
-					}
-				} else if key > searchKey {
-					if leftTo == nil {
-						out <- "nope"
-					} else {
-						leftTo <- "search"
-						leftTo <- searchKey
-						out <- <-leftFro
-					}
-				} else {
-					// searchKey == key
+
+				sideTo := &rightTo
+				sideFro := &rightFro
+				if key > searchKey {
+					sideTo = &leftTo
+					sideFro = &leftFro
+				} else if key == searchKey {
 					out <- "found"
+					continue
+				}
+
+				if *sideTo == nil {
+					out <- "nope"
+				} else {
+					*sideTo <- "search"
+					*sideTo <- searchKey
+					out <- <-*sideFro
 				}
 			default:
 				out <- "what?"
@@ -104,11 +103,9 @@ func main() {
 	keys := []string{"ma", "ro", "zin", "ko", "aq", "er", "se", "ca", "pi", "ty", "ge", "me", "mo"}
 	for i := 0; i < len(keys); i++ {
 		t.Add(keys[i])
-		fmt.Print(keys[i])
-		fmt.Print(", ")
 	}
 	fmt.Println("")
 
 	found := t.Search("se")
-	fmt.Printf("'se' is in the tree? %v", found)
+	fmt.Printf("'se' is in the tree? %v\n", found)
 }
