@@ -32,6 +32,8 @@ _Me_: don't know yet. but I hope so because there are no locks.. but maybe a lar
 
 ## Cool tricks
 
+### 1 
+
 Its common on textbook binary tree implemantations to define a node like 
 
 ```go
@@ -49,6 +51,48 @@ Data is stored on local variables ["inside" the goroutine](https://play.golang.o
 By data I mean the "key" and channels. Yep. No pointers to other nodes. The goroutine saves 4 channels: left**To**, left**Fro**, right**To**, right**Fro**. 
 
 These are used to send messages to and fro. 
+
+### 2
+
+When doing a change to a node like adding a key code normally looks like
+
+```go
+func (v *Tree) Add(n *Node, key string) {
+  if n.key > key {
+    if n.right == nil {
+      n.right = &Node{key: key}
+    } else {
+      v.Add(n.right, key)
+    }
+  } else {
+    if n.left == nil {
+      n.left = &Node{key: key}
+    } else {
+      v.Add(n.left, key)
+    }
+  }
+}
+```
+
+But that's not so DRY. Pointers to the rescue. Pointers to channels on gopherwood:
+
+```go
+        sideTo := &rightTo
+        sideFro := &rightFro
+        if key > newKey {
+          sideTo = &leftTo
+          sideFro = &leftFro
+        } else if key == newKey {
+          continue
+        }
+
+        if *sideTo == nil {
+          *sideTo, *sideFro = createNode(newKey)
+        } else {
+          *sideTo <- "add"
+          *sideTo <- newKey
+        }
+```
 
 
 ## TODO 
