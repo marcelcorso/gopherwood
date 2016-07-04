@@ -94,6 +94,17 @@ But that's not so DRY. Pointers to the rescue. Pointers to channels on gopherwoo
         }
 ```
 
+## Benchmarks
+
+Comparing Gopherwood with a textbook implementation of binary tree. Adding N random keys with one goroutine. 
+
+```
+go test -bench=.
+PASS
+BenchmarkGopherwoodAdd-8       10000        395670 ns/op
+BenchmarkGotreeAdd-8           10000        344732 ns/op
+ok      github.com/marcelcorso/gopherwood   8.073s
+```
 
 ## TODO 
 
