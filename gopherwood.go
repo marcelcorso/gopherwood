@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package gopherwood
 
 func createNode(key string) (chan string, chan string) {
 	in := make(chan string)
@@ -96,16 +94,4 @@ type Node struct {
 	key   string
 	left  *Node
 	right *Node
-}
-
-func main() {
-	t := Tree{}
-	keys := []string{"ma", "ro", "zin", "ko", "aq", "er", "se", "ca", "pi", "ty", "ge", "me", "mo"}
-	for i := 0; i < len(keys); i++ {
-		t.Add(keys[i])
-	}
-	fmt.Println("")
-
-	found := t.Search("se")
-	fmt.Printf("'se' is in the tree? %v\n", found)
 }
