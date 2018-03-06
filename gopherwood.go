@@ -47,7 +47,7 @@ func createNode(key string) (chan string, chan string) {
 					sideTo = &leftTo
 					sideFro = &leftFro
 				} else if key == searchKey {
-					out <- "found"
+					out <- key
 					continue
 				}
 

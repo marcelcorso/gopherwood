@@ -1,12 +1,8 @@
 package gopherwood
 
-import (
-	"math/rand"
-	"testing"
+import "math/rand"
 
-	"github.com/marcelcorso/gotree"
-)
-
+/*
 func BenchmarkGotreeAdd(b *testing.B) {
 	rand.Seed(boringRandomSeed)
 	t := gotree.Tree{}
@@ -14,6 +10,7 @@ func BenchmarkGotreeAdd(b *testing.B) {
 		t.Add(randStringBytesRmndr(b.N))
 	}
 }
+*/
 
 // http://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
